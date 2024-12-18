@@ -1,0 +1,14 @@
+.App {
+    text-align: center;
+    padding: 20px;
+  }
+  
+  .bus-map-container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .error-message {
+    color: red;
+    margin-bottom: 10px;
+  }

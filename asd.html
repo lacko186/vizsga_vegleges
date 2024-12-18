@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Animált Gomb</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<style>
+/* Alap stílusok */
+body {
+    font-family: 'Arial', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #1a1a1a;
+}
+
+.animated-button {
+    padding: 20px 40px;
+    font-size: 20px;
+    font-weight: bold;
+    text-transform: uppercase;
+    border: 2px solid #ff0000;
+    border-radius: 50px;
+    background-color: #ff1c1c;
+    color: white;
+    cursor: pointer;
+    outline: none;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+    transition: all 0.3s ease-in-out;
+    font-family: 'Arial', sans-serif;
+}
+
+/* Fókuszáláskor erősebb fények */
+.animated-button:focus {
+    box-shadow: 0 0 30px rgba(255, 59, 48, 1), 0 0 20px rgba(255, 0, 0, 0.7);
+}
+
+/* Kattintáskor a gomb összehúzódik és erős animáció indul */
+.animated-button:active {
+    transform: scale(0.9);
+    box-shadow: 0 4px 25px rgba(255, 0, 0, 0.8);
+}
+
+/* Gomb alatt pulzáló fényhatás */
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 8px 20px rgba(255, 0, 0, 0.4);
+    }
+    50% {
+        transform: scale(1.1);
+        box-shadow: 0 12px 30px rgba(255, 0, 0, 0.6);
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 8px 20px rgba(255, 0, 0, 0.4);
+    }
+}
+
+/* Lendület animáció */
+.animated-button.pulsing {
+    animation: pulse 1s infinite ease-in-out;
+}
+
+/* Gomb színátmenet és fények hoverre */
+.animated-button:hover {
+    background-color: #ff3b3b;
+    box-shadow: 0 10px 25px rgba(255, 0, 0, 0.8), 0 0 15px rgba(255, 0, 0, 0.7);
+}
+
+/* A gombot körülvevő fényhatás */
+.animated-button:before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 300%;
+    height: 300%;
+    background-color: rgba(255, 0, 0, 0.1);
+    border-radius: 50%;
+    transition: width 0.5s ease, height 0.5s ease, top 0.5s ease, left 0.5s ease;
+    transform: translate(-50%, -50%);
+}
+
+/* Kattintáskor a fényhatás kisebb lesz */
+.animated-button.clicked:before {
+    width: 0;
+    height: 0;
+    top: 50%;
+    left: 50%;
+}
+
+/* Erősebb animáció kattintás után */
+.animated-button.clicked {
+    animation: pulse 0.3s ease-out;
+}
+
+
+</style>
+<body>
+
+    <button class="animated-button" id="clickButton">Kattints rám!</button>
+
+    <script>
+     const button = document.getElementById('clickButton');
+
+button.addEventListener('click', function() {
+    // Hozzáadja a 'clicked' osztályt, hogy aktiválja az animációt
+    button.classList.add('clicked');
+    
+    // Felvesszük a pulzáló animációt
+    button.classList.add('pulsing');
+    
+    // Eltávolítja a 'clicked' osztályt egy kis idő után, hogy újra használható legyen a gomb
+    setTimeout(() => {
+        button.classList.remove('clicked');
+        button.classList.remove('pulsing');
+    }, 800);  // Ez az idő az animáció végrehajtásának ideje
+});
+
+    </script>
+</body>
+</html>

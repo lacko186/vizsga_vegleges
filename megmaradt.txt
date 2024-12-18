@@ -1,0 +1,15 @@
+miről szól?
+	-A projekt célja a Kaposvári Közlekedési Zrt. helyi járatos közlekedésének könnyebb, átláthatóbb felhasználóbarát felületének létrehozása volt
+	 Az oldal inspirációt ad egy modern közlekedési oldal létrehozásában
+	 Tekintettel a felhasználókra online egyszerű jegyrendelés késés igazolás opció, valós idejű lekérdezés 
+milyen problémára akar megoldást nyújtani?
+	- A https://www.kaposbusz.hu/ weboldal használata statikus, pdfekkel történik a menetrendek megtekintése csak helyben lehet jegyet vásárolni elavult, nehéz használat
+	- Az egyre sűrűbben jelentkező probléma a késés és annak igazolása az ebből adódó problémák kikerülése, gördülékenyebb tájékozódás a nem kaposváriak számára
+mi a cél?
+	- felhasználóbarát környezet kiépítése, utasinformációk, és egyéb szolgáltatás elérhetővé tétele, modern megjelenés	
+
+ milyen hardver és szoftver eszközök?
+	-hardveresen egy okostelefonra\Személyi számítógépre\Táblagépre(okoseszközök) szoftveresen Windows,Macos támogatás legalább Andorid 14-et futtotó okostelefon
+
+
+

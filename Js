@@ -1,0 +1,137 @@
+Socket.IO kliens inicializálása
+const socket = io('http://localhost:3000');
+
+// Busz markerek tárolása
+const busMarkers = new Map();
+
+// Socket.IO események kezelése
+socket.on('initialBusPositions', (buses) => {
+    Object.values(buses).forEach(bus => {
+        addOrUpdateBusMarker(bus);
+    });
+});
+
+socket.on('busPositionsUpdate', (buses) => {
+    Object.values(buses).forEach(bus => {
+        addOrUpdateBusMarker(bus);
+    });
+});
+
+// Busz marker hozzáadása vagy frissítése a térképen
+function addOrUpdateBusMarker(bus) {
+    const position = new google.maps.LatLng(bus.position.lat, bus.position.lng);
+    
+    if (busMarkers.has(bus.id)) {
+        // Meglévő marker frissítése
+        const marker = busMarkers.get(bus.id);
+        marker.setPosition(position);
+    } else {
+        // Új marker létrehozása
+        const marker = new google.maps.Marker({
+            position: position,
+            map: map,
+            title: `Busz ${bus.id} - ${bus.route}`,
+            icon: {
+                url: 'bus-icon.png', // Készíts egy busz ikont
+                scaledSize: new google.maps.Size(32, 32)
+            }
+        });
+        
+        // Info ablak hozzáadása
+        const infoWindow = new google.maps.InfoWindow({
+            content: `
+                <div>
+                    <h3>Busz ${bus.id}</h3>
+                    <p>Útvonal: ${bus.route}</p>
+                    <p>Státusz: ${bus.status}</p>
+                </div>
+            `
+        });
+        
+        marker.addListener('click', () => {
+            infoWindow.open(map, marker);
+        });
+        
+        busMarkers.set(bus.id, marker);
+    }
+}
+
+
+
+const express = require('express');
+const app = express();
+const http = require('http').createServer(app);
+const io = require('socket.io')(http);
+const cors = require('cors');
+
+// Middleware
+app.use(cors());
+app.use(express.json());
+app.use(express.static('public'));
+
+// Szimuláljuk a buszok pozícióit (valós esetben ez jönne a GPS adatokból)
+let buses = {
+    "1": { id: "1", route: "Belváros-Toponár", position: { lat: 46.359997, lng: 17.796976 }, status: "On Time" },
+    "2": { id: "2", route: "Belváros-Kaposfüred", position: { lat: 46.363116, lng: 17.776970 }, status: "On Time" },
+    "3": { id: "3", route: "Belváros-Töröcske", position: { lat: 46.313599, lng: 17.779864 }, status: "Delayed" }
+};
+
+// Szimulált pozíció frissítés
+function updateBusPositions() {
+    Object.keys(buses).forEach(busId => {
+        // Random mozgás szimulálása
+        buses[busId].position.lat += (Math.random() - 0.5) * 0.001;
+        buses[busId].position.lng += (Math.random() - 0.5) * 0.001;
+        
+        // Véletlenszerű késés szimulálása
+        if (Math.random() < 0.1) {
+            buses[busId].status = Math.random() < 0.5 ? "On Time" : "Delayed";
+        }
+    });
+    
+    // Broadcast az új pozíciókat minden kliensnek
+    io.emit('busPositionsUpdate', buses);
+}
+
+// Socket.IO kapcsolatok kezelése
+io.on('connection', (socket) => {
+    console.log('Kliens csatlakozott');
+    
+    // Küldjük el az aktuális busz pozíciókat az új kliensnek
+    socket.emit('initialBusPositions', buses);
+    
+    // Kliens oldali kérések kezelése
+    socket.on('requestBusInfo', (busId) => {
+        const busInfo = buses[busId];
+        if (busInfo) {
+            socket.emit('busInfo', busInfo);
+        }
+    });
+    
+    socket.on('disconnect', () => {
+        console.log('Kliens lecsatlakozott');
+    });
+});
+
+// API végpontok
+app.get('/api/buses', (req, res) => {
+    res.json(buses);
+});
+
+app.get('/api/bus/:id', (req, res) => {
+    const busInfo = buses[req.params.id];
+    if (busInfo) {
+        res.json(busInfo);
+    } else {
+        res.status(404).json({ error: 'Busz nem található' });
+    }
+});
+
+// Szerver indítása
+const PORT = process.env.PORT || 3000;
+http.listen(PORT, () => {
+    console.log(`Szerver fut a következő porton: ${PORT}`);
+    
+    // Pozíció frissítések indítása (2 másodpercenként)
+    setInterval(updateBusPositions, 2000);
+});

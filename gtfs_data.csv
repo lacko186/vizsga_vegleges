@@ -1,0 +1,2 @@
+config_id,created,trips_begin,trips_end,trips_count,timetable_period,checksum,db_version,included_configs
+kaposvar,2024-12-17T07:49:22+01:00,20241217,20250214,1412,60,FCB16CD4DE22FBD48D9F67355B27EA8529367DA52ECDDE168CE19EF7EA00C8C3,5,"[""mav_kaposvar"", ""volanbusz_kaposvar""]"

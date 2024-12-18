@@ -1,0 +1,22 @@
+{
+  "name": "kaposvar-transport-tracker",
+  "version": "1.0.0",
+  "description": "Valós idejű közlekedési tracker Kaposvár helyi járatokhoz.",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "dev": "nodemon src/app.js"
+  },
+  "dependencies": {
+    "@googlemaps/google-maps-services-js": "^3.4.0",
+    "axios": "^1.5.0",
+    "dotenv": "^16.4.6",
+    "express": "^4.21.1",
+    "winston": "^3.8.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.0",
+    "prettier": "^3.4.2",
+    "prettier-plugin-tailwindcss": "^0.6.9"
+  }
+}
